@@ -10,40 +10,52 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_03_114325) do
+ActiveRecord::Schema.define(version: 2021_05_03_123539) do
 
   create_table "clients", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "client_number", null: false
-    t.string "company"
-    t.string "company_kana"
-    t.string "last_name"
-    t.string "first_name"
-    t.string "last_name_kana"
-    t.string "first_name_kana"
-    t.string "phone_number"
-    t.string "phone_number_2"
-    t.string "postal_code"
-    t.string "prefecture"
-    t.string "municipalities"
-    t.string "block_number"
-    t.string "building"
-    t.string "category"
-    t.string "PIC"
-    t.string "details"
+    t.string "client_number", limit: 255, null: false
+    t.string "company", limit: 255
+    t.string "company_kana", limit: 255
+    t.string "last_name", limit: 255
+    t.string "first_name", limit: 255
+    t.string "last_name_kana", limit: 255
+    t.string "first_name_kana", limit: 255
+    t.string "phone_number", limit: 255
+    t.string "phone_number_2", limit: 255
+    t.string "postal_code", limit: 255
+    t.string "prefecture", limit: 255
+    t.string "municipalities", limit: 255
+    t.string "block_number", limit: 255
+    t.string "building", limit: 255
+    t.string "category", limit: 255
+    t.string "PIC", limit: 255
+    t.string "details", limit: 255
     t.date "start_date"
-    t.string "remark"
-    t.string "staff", null: false
+    t.string "remark", limit: 255
+    t.string "staff", limit: 255, null: false
     t.boolean "done_flag", default: false, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.timestamp "updated_at"
   end
 
   create_table "images", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.text "src"
     t.bigint "clients_id", null: false
+    t.timestamp "created_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.timestamp "updated_at"
+    t.index ["clients_id"], name: "index_images_on_clients_id"
+  end
+
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["clients_id"], name: "index_images_on_clients_id"
+    t.index ["name"], name: "index_users_on_name"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token"
   end
 
   add_foreign_key "images", "clients", column: "clients_id"
